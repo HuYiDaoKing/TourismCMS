@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>详细</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">供应商管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>详细</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>详细</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" action="">
+                        <div class="modal-body" id="supplier_detail">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="reset" value="返回" onclick="Helpers.GoBack();" class="btn btn-white btn-w-m">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---supplier detail tpl-->
+<script id="supplier-detail-tpl" type="text/x-jquery-tmpl">
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">类型</span><input id="Type" type="text" class="form-control" value="{{= Type}}" name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">名字</span><input id="Name" type="text" class="form-control" value="{{= Name}}" name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">负责人</span><input id="Name" type="text" class="form-control" value="{{= Manager}}" name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">手机号码</span><input id="Phone" type="text" class="form-control" value="{{= Phone}}" name="add_kr_idcard" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">传真</span><input id="Fax" type="text" class="form-control" value="{{= Fax}}" n name="add_email_type" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">QQ</span><input id="QQ" type="text" class="form-control" value="{{= QQ}}" name="add_fj_accountid" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">微信</span><input id="WeChat" type="text" class="form-control" value="{{= WeChat}}" name=" add_floor_phone" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">账号</span><input id="AccountId" type="text" class="form-control" value="{{= AccountId}}" name=" add_sm_price">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">地址</span><input id="Address" type="text" class="form-control" value="{{= Address}}" name="add_sm_price">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">代理类型</span><input id="ProxyType" type="text" class="form-control" value="{{= ProxyType}}" name=" add_sm_price">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="{{= Description}}" name="add_ds_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">创建时间</span><input id="Created" type="text" class="form-control" value="{{= Created}}" name="add_ds_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">修改时间</span><input id="Modified" type="text" class="form-control" value="{{= Modified}}" name="add_ds_price" readonly="readonly">
+    </div>
+
+</script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/Helper/helper.js"></script>
+<script type="text/javascript">
+
+    //全局参数
+    var id = Helpers.getURLParameter('id');
+
+    $(function () {
+
+        loadUserData();
+
+    })
+
+    function loadUserData() {
+
+        $.ajax({
+            url: '/Supplier/GetById',
+            type: 'GET',
+            data: { id: id },
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#supplier_detail').html('');
+                $('#supplier-detail-tpl').tmpl(data).appendTo('#supplier_detail');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+</script>

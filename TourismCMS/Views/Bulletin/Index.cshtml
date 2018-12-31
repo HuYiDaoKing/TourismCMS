@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .table_column_hidden {
+        display: none;
+    }
+</style>
+
+<!---bulletin table tpl-->
+<script id="bulletin-table-tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td>
+            <div class="i-checks">
+                <label class="checkbox_btn">
+                    <input type="checkbox" value="{{= Id}}" name="test">
+                </label>
+            </div>
+        </td>
+        <td class="table_column_hidden">{{= Id}}</td>
+        <td>{{= Name}}</td>
+        <td>{{= Content}}</td>
+        <td>{{= Address}}</td>
+        <td>{{= Creator}}</td>
+        <td>{{= Created}}</td>
+        <td>{{= Modified}}</td>
+        <td class="center">
+            <button class="btn-link" onclick="update(this);">修改</button>
+        </td>
+    </tr>
+</script>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>公告管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">公告管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>列表</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>公告管理</h5>
+                </div>
+                <div class="ibox-title">
+                    <a class="btn btn-w-m btn-info" href="/Bulletin/Add">添加</a>
+                    <button type="button" class="btn btn-w-m btn-danger" id="delete_btn">删除</button>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" action="" class="navbar-form no-padding" role="form">
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-striped" data-page-size="8" data-filter=#filter>
+                            <thead>
+                                <tr>
+                                    <th id="check_all" style="cursor:pointer;">全选</th>
+                                    <th>标题</th>
+                                    <th>内容</th>
+                                    <th>创建日期</th>
+                                    <th>修改日期</th>
+                                    <th>作者</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulletin_table"></tbody>
+                        </table>
+                        <div class="btn-group pull-right">
+                            <p id="pageIndex" style="font-size:20px;font-weight:bold;color:blue;margin-left:150px;"></p>
+                            <input id="pageStart" type="text" style="display:none" />
+                            <ul class="pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/Bulletin/Bulletin.js"></script>
+<style>
+    .pagination {
+        font-weight: bold;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+        $("#check_all").click(function () {
+            //alert("111");
+            $(".checkbox_btn").click();
+        });
+
+        getPageBulletins(0);
+
+        //批量删除
+        $("#delete_btn").click(function () {
+            var obj = document.getElementsByName('test');
+            var s = '';
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) s += obj[i].value + ',';
+            }
+
+            //delete_click(s);
+        });
+
+    })
+</script>
+

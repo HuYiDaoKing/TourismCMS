@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>详细</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">用户管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>详细</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>详细</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" action="">
+                        <div class="modal-body" id="user_detail">
+                            @*<div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">名字</span><input id="Name" type="text" class="form-control" value="" name="add_kr_name" readonly="readonly">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">身份证</span><input id="IDCard" type="text" class="form-control" value="" name="add_kr_idcard" readonly="readonly">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">邮箱</span><input id="Email" type="text" class="form-control" value="" name="add_email_type" readonly="readonly">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">账号</span><input id="AccountId" type="text" class="form-control" value="" name="add_fj_accountId" readonly="readonly">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">手机</span><input id="Phone" type="text" class="form-control" value="" name="add_floor_Phone" readonly="readonly">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">职位</span><input id="Position" type="text" class="form-control" value="" name="add_sm_price">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="" name="add_ds_price" readonly="readonly">
+                            </div>*@
+                        </div>
+                        <div class="modal-footer">
+                            <input type="reset" value="返回" onclick="Helpers.GoBack();" class="btn btn-white btn-w-m">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---user detail tpl-->
+<script id="user-detail-tpl" type="text/x-jquery-tmpl">
+    
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">名字</span><input id="Name" type="text" class="form-control" value="{{= Name}}" name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">身份证</span><input id="IDCard" type="text" class="form-control" value="{{= IDCard}}" name="add_kr_idcard" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">邮箱</span><input id="Email" type="text" class="form-control" value="{{= Email}}" name="add_email_type" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">账号</span><input id="AccountId" type="text" class="form-control" value="{{= AccountId}}" name="add_fj_accountId" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">手机</span><input id="Phone" type="text" class="form-control" value="{{= Phone}}" nam name="add_floor_Phone" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">职位</span><input id="Position" type="text" class="form-control" value="{{= Position}}" name="add_sm_price">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="{{= Description}}" name="add_ds_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">创建日期</span><input id="Description" type="text" class="form-control" value="{{= Created}}" nam name="add_ds_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">修改日期</span><input id="Description" type="text" class="form-control" value="{{= Modified}}" na name="add_ds_price" readonly="readonly">
+    </div>
+
+</script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/Helper/helper.js"></script>
+<script type="text/javascript">
+
+    //全局参数
+    var id = Helpers.getURLParameter('id');
+
+    $(function () {
+
+        loadUserData();
+
+    })
+
+    function loadUserData() {
+
+        $.ajax({
+            url: '/UserAdmin/GetUserById',
+            type: 'GET',
+            //data: { start: start, limit: 5, keyword: '' },
+            data:{id:id},
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                //$('#usercombo').html('');
+                //$('#user-combo-tpl').tmpl(data).appendTo('#usercombo');
+                //console.log(data);
+                $('#user_detail').html('');
+                $('#user-detail-tpl').tmpl(data).appendTo('#user_detail');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+</script>

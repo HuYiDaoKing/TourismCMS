@@ -1,0 +1,340 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!---ticket combo tpl-->
+<script id="ticket-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---channel combo tpl-->
+<script id="channel-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---supplier combo tpl-->
+<script id="supplier-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">门票订单管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>添加</strong>
+            </li>
+        </ol>
+        <div class="text-center" style="color:#CC0000;font-size:24px;">
+            <span id="message_info"></span><!--显示服务器返回的提示信息-->
+        </div>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>添加</h5>
+        </div>
+        <div class="ibox-content">
+            <form method="get" action="">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="modal-body row">
+                            <div class="input-group date" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">门票</span>
+                                <select class="btn btn-white" id="ticketcombo"></select>
+                                <span style="color:#CC0000;">必填</span>
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">渠道</span><select class="btn btn-white" id="channelcombo"></select>
+                                <span style="color:#CC0000;">必填</span>
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">供应商</span>
+                                <select class="btn btn-white" id="suppliercombo"></select>
+                                <span style="color:#CC0000;">必填</span>
+                            </div>
+                            <div class="input-group date" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">预定时间</span><input id="BookTime" type="text" class="form-control" value="" name="add_rz_time" placeholder="必填">
+                            </div>
+                            <div class="input-group date" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">使用时间</span><input id="UseDate" type="text" class="form-control" value="" name="add_rz_time" placeholder="必填">
+                            </div>
+                            @*<div class="input-group date" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">离开时间</span><input id="EndDate" type="text" class="form-control" value="" name="add_lk_time">
+                            </div>*@
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">姓名</span><input id="GuestName" type="text" class="form-control" value="" name="add_kr_name" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">电话</span><input id="GuestPhone" type="text" class="form-control" value="" name="add_kr_phone" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">票型</span><input id="TicketType" type="text" class="form-control" value="" name="add_room_type" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">票数</span><input id="TicketNum" type="text" class="form-control" value="" name="add_fj_number" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">底价</span><input id="OriginalPrice" type="text" class="form-control" value="" name="add_floor_price" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">售卖价</span><input id="SellPrice" type="text" class="form-control" value="" name="add_sm_price" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">代收</span><input id="ProxyIncome" type="text" class="form-control" value="" name="add_ds_price" placeholder="必填">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="" name="add_ds_desc">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input id="btnAdd" type="button" value="完成" class="btn btn-primary btn-w-m">
+                            @*<input type="reset" value="取消" class="btn btn-white btn-w-m">*@
+                            <input type="reset" value="返回" onclick="Helpers.GoBack();" class="btn btn-white btn-w-m">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+        $('.footable').footable();
+
+        $('#BookTime').datepicker({
+            todayBtn: "linked",
+            format: "yyyy-mm-dd",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+        $('#UseDate').datepicker({
+            todayBtn: "linked",
+            format: "yyyy-mm-dd",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+        //$('#EndDate').datepicker({
+        //    todayBtn: "linked",
+        //    format: "yyyy-mm-dd",
+        //    keyboardNavigation: false,
+        //    forceParse: false,
+        //    calendarWeeks: true,
+        //    autoclose: true
+        //});
+
+        //初始化下拉列表
+        createTicketCombo();
+        createChannelCombo();
+        createSupplierCombo();
+
+        $("#btnAdd").click(function () {
+
+            //alert('添加');
+            Add();
+        })
+
+    })
+
+    function Add() {
+        var ticketId = $('#ticketcombo').val();
+        var channelId = $('#channelcombo').val();
+        var supplierId = $('#suppliercombo').val();
+        //var startDate = $('#StartDate').val();
+        var bookTime = $('#BookTime').val();
+        var useDate = $('#UseDate').val();
+        var guestName = $('#GuestName').val();
+        var guestPhone = $('#GuestPhone').val();
+        var ticketType = $('#TicketType').val();
+        var ticketNum = $('#TicketNum').val();
+        var originalPrice = $('#OriginalPrice').val();
+        var sellPrice = $('#SellPrice').val();
+        var proxyIncome = $('#ProxyIncome').val();
+        var description = $('#Description').val();
+
+        if (Helpers.IsNullOrEmpty(ticketId) || Helpers.IsNullOrEmpty(channelId) || Helpers.IsNullOrEmpty(supplierId))
+        {
+            showMsg('门票,渠道,供应商不能为空!');
+            return;
+        }
+
+        if (Helpers.IsNullOrEmpty(bookTime)
+            || Helpers.IsNullOrEmpty(useDate)
+            || Helpers.IsNullOrEmpty(guestName)
+            || Helpers.IsNullOrEmpty(guestPhone)
+            || Helpers.IsNullOrEmpty(guestName)
+            || Helpers.IsNullOrEmpty(ticketType)
+            || Helpers.IsNullOrEmpty(ticketNum)
+            || Helpers.IsNullOrEmpty(originalPrice)
+            || Helpers.IsNullOrEmpty(sellPrice)
+            || Helpers.IsNullOrEmpty(proxyIncome)
+
+            ) {
+            bootbox.alert("必填字段不能为空,请检查!");
+            return;
+        }
+
+        if (!Helpers.isNum(ticketNum)) {
+            bootbox.alert("票数必须是正整数,请检查!");
+            return;
+        }
+        if (!Helpers.isDecimal(originalPrice)) {
+            bootbox.alert("底价必须是正数或小数,请检查!");
+            return;
+        }
+        if (!Helpers.isDecimal(sellPrice)) {
+            bootbox.alert("售卖价必须是正整数,请检查!");
+            return;
+        }
+
+        if (!Helpers.isRealNum(proxyIncome)) {
+            bootbox.alert("代收必须是实数,请检查!");
+            return;
+        }
+
+        $.ajax({
+            url: '/TicketOrder/Insert',
+            type: 'POST',
+            data: {
+                ticketId: ticketId,
+                channelId: channelId,
+                supplierId: supplierId,
+                //startDate: startDate,
+                //endDate: endDate,
+                bookTime: bookTime,
+                useDate:useDate,
+                guestName: guestName,
+                guestPhone: guestPhone,
+                ticketType: ticketType,
+                ticketNum: ticketNum,
+                originalPrice: originalPrice,
+                sellPrice: sellPrice,
+                proxyIncome: proxyIncome,
+                description:description
+            },
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                if (data.Bresult) {
+                    window.location.href = '/TicketOrder/Index';
+                } else {
+                    showMsg(data.Notice);
+                }
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+
+        });
+    }
+
+    //门票下拉
+    function createTicketCombo() {
+
+        $.ajax({
+            url: '/Combo/GetTicketComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#ticketcombo').html('');
+                $('#ticket-combo-tpl').tmpl(data).appendTo('#ticketcombo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+    //渠道下拉
+    function createChannelCombo() {
+
+        $.ajax({
+            url: '/Combo/GetChannelComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            data: { type: '门票' },
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#channelcombo').html('');
+                $('#channel-combo-tpl').tmpl(data).appendTo('#channelcombo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+    //供应商下拉
+    function createSupplierCombo() {
+
+        $.ajax({
+            url: '/Combo/GetSupplierComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            data: { type: '门票' },
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#suppliercombo').html('');
+                $('#supplier-combo-tpl').tmpl(data).appendTo('#suppliercombo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+    function showMsg(message) {
+        $('#message_info').html('');
+        $('#message_info').html(message);
+    }
+
+
+</script>
+

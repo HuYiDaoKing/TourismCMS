@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TourismModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Channel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+    <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Hotel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="HotelOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="HotelId" Type="Int32" />
+    <Property Name="GuestName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="GuestPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RoomType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RoomNum" Type="Int32" />
+    <Property Name="OriginalPrice" Type="Double" />
+    <Property Name="SellPrice" Type="Double" />
+    <Property Name="BookTime" Type="DateTime" Precision="3" />
+    <Property Name="StartDate" Type="DateTime" Precision="0" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <Property Name="ProxyIncome" Type="Double" />
+    <Property Name="ChannelId" Type="Int32" />
+    <Property Name="SupplierId" Type="Int32" />
+    <Property Name="BalanceStatus" Type="Int32" />
+    <Property Name="BalanceDate" Type="DateTime" Precision="0" />
+    <Property Name="CollectMoneyStatus" Type="Int32" />
+    <Property Name="CollectMoneyDate" Type="DateTime" Precision="0" />
+    <Property Name="ReviewStatus" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+    <Property Name="HandlerId" Type="Int32" />
+    <Property Name="CheckerId" Type="Int32" />
+    <Property Name="BalanceRemark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CollectMoneyRemark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Settlement" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ModifierId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Route">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="RouteOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="RouteId" Type="Int32" />
+    <Property Name="GuestName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="GuestPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AdultNum" Type="Int32" />
+    <Property Name="AdultOriginalPrice" Type="Double" />
+    <Property Name="AdultSellPrice" Type="Double" />
+    <Property Name="ChildNum" Type="Int32" />
+    <Property Name="ChildOriginalPrice" Type="Double" />
+    <Property Name="ChildSellPrice" Type="Double" />
+    <Property Name="BookTime" Type="DateTime" Precision="3" />
+    <Property Name="StartDate" Type="DateTime" Precision="0" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <Property Name="ProxyIncome" Type="Double" />
+    <Property Name="ChannelId" Type="Int32" />
+    <Property Name="SupplierId" Type="Int32" />
+    <Property Name="BalanceDate" Type="DateTime" Precision="0" />
+    <Property Name="CollectMoneyStatus" Type="Int32" />
+    <Property Name="CollectMoneyDate" Type="DateTime" Precision="0" />
+    <Property Name="ReviewStatus" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+    <Property Name="HandlerId" Type="Int32" />
+    <Property Name="CheckerId" Type="Int32" />
+    <Property Name="BalanceRemark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CollectMoneyRemark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BalanceStatus" Type="Int32" />
+    <Property Name="Settlement" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ExtrasOriginPrice" Type="Double" />
+    <Property Name="ExtrasSellPrice" Type="Double" />
+    <Property Name="modifier" Type="Int32" />
+    <Property Name="ModifierId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Manager" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="WeChat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AccountId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ProxyType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="SupplierProduct">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplerId" Type="Int32" />
+    <Property Name="ProductId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="TicketOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ChannelId" Type="Int32" />
+    <Property Name="TicketId" Type="Int32" />
+    <Property Name="SupplierId" Type="Int32" />
+    <Property Name="GuestName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="GuestPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="TicketNum" Type="Int32" />
+    <Property Name="TicketType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OriginalPrice" Type="Double" />
+    <Property Name="SellPrice" Type="Double" />
+    <Property Name="BookTime" Type="DateTime" Precision="3" />
+    <Property Name="UseDate" Type="DateTime" Precision="0" />
+    <Property Name="ProxyIncome" Type="Double" />
+    <Property Name="BalanceDate" Type="DateTime" Precision="0" />
+    <Property Name="CollectMoneyStatus" Type="Int32" />
+    <Property Name="CollectMoneyDate" Type="DateTime" Precision="0" />
+    <Property Name="ReviewStatus" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+    <Property Name="HandlerId" Type="Int32" />
+    <Property Name="CheckerId" Type="Int32" />
+    <Property Name="BalanceRemark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CollectMoneyRemark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BalanceStatus" Type="Int32" />
+    <Property Name="Settlement" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="modifier" Type="Int32" />
+    <Property Name="ModifierId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IDCard" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AccountId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PasswordSalt" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="UserRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="RoleId" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="Modified" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityContainer Name="TourismDbContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Channel" EntityType="Self.Channel" />
+    <EntitySet Name="Hotel" EntityType="Self.Hotel" />
+    <EntitySet Name="HotelOrder" EntityType="Self.HotelOrder" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="Route" EntityType="Self.Route" />
+    <EntitySet Name="RouteOrder" EntityType="Self.RouteOrder" />
+    <EntitySet Name="Supplier" EntityType="Self.Supplier" />
+    <EntitySet Name="SupplierProduct" EntityType="Self.SupplierProduct" />
+    <EntitySet Name="Ticket" EntityType="Self.Ticket" />
+    <EntitySet Name="TicketOrder" EntityType="Self.TicketOrder" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <EntitySet Name="UserRole" EntityType="Self.UserRole" />
+  </EntityContainer>
+</Schema>

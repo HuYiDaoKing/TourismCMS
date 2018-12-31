@@ -1,0 +1,16 @@
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\OneTrip.Common.Utility.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\OneTrip.Common.Utility.pdb
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\Microsoft.VisualStudio.TestTools.UITesting.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\System.Web.Razor.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\Microsoft.VisualStudio.TestTools.UITest.Extension.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\Microsoft.VisualStudio.TestTools.UITest.Common.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\UiaComWrapper.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\Microsoft.VisualStudio.TestTools.UITest.ExtensionUtilities.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\Interop.UIAutomationClient.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\System.Web.Razor.xml
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\zh-Hans\Microsoft.VisualStudio.TestTools.UITesting.resources.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\zh-Hans\Microsoft.VisualStudio.TestTools.UITest.Extension.resources.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\bin\Release\zh-Hans\Microsoft.VisualStudio.TestTools.UITest.Common.resources.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\obj\Release\OneTrip.Common.Utility.dll
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\obj\Release\OneTrip.Common.Utility.pdb
+E:\开源项目\TourismCMS\TourismCMS\OneTrip.Common.Utility\obj\Release\OneTrip.Common.Utility.csprojResolveAssemblyReference.cache

@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>详细</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">酒店订单管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>详细</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>详细</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" action="">
+                        <div class="modal-body" id="hotel_order_detail">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="reset" value="返回" onclick="Helpers.GoBack();" class="btn btn-white btn-w-m">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---supplier detail tpl-->
+<script id="hotel-order-detail-tpl" type="text/x-jquery-tmpl">
+
+    @*<div class="input-group" style="margin-top:10px;">
+            <span class="input-group-addon btn-w-m">负责人</span><input id="Name" type="text" class="form-control" value="{{= Manager}}" name="add_kr_name" readonly="readonly">
+        </div>*@
+    <div class="input-group date" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">酒店</span>
+        @*<select class="btn btn-white" id="hotelcombo"></select>*@
+        <input id="hotelName" type="text" class="form-control" value="{{= Hotel}}" n name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        @*<span class="input-group-addon btn-w-m">渠道</span><select class="btn btn-white" id="channelcombo"></select>*@
+        <span class="input-group-addon btn-w-m">渠道</span>
+        <input id="channelName" type="text" class="form-control" value="{{= Channel}}" n name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">供应商</span>
+        @*<select class="btn btn-white" id="suppliercombo"></select>*@
+        <input id="supplierName" type="text" class="form-control" value="{{= Supplier}}" n name=" add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group date" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">入住时间</span><input id="StartDate" type="text" class="form-control" value="{{= StartDate}}" name="add_rz_time" readonly="readonly">
+    </div>
+    <div class="input-group date" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">离开时间</span><input id="EndDate" type="text" class="form-control" value="{{= StartDate}}" name="add_lk_time" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">姓名</span><input id="GuestName" type="text" class="form-control" value="{{= GuestName}}" name="add_kr_name" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">电话</span><input id="GuestPhone" type="text" class="form-control" value="{{= GuestPhone}}" name="add_kr_phone" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">房型</span><input id="RoomType" type="text" class="form-control" value="{{= RoomType}}" n name="add_room_type" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">间数</span><input id="RoomNum" type="text" class="form-control" value="{{= RoomNum}}" name="add_fj_number" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">底价</span><input id="OriginalPrice" type="text" class="form-control" value="{{= OriginalPrice}}" name="add_floor_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">售卖价</span><input id="SellPrice" type="text" class="form-control" value="{{= SellPrice}}" nam name="add_sm_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">代收</span><input id="ProxyIncome" type="text" class="form-control" value="{{= ProxyIncome}}" name="add_ds_price" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="{{= Description}}" name="add_ds_desc" readonly="readonly">
+    </div>
+
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">创建时间</span><input id="Description" type="text" class="form-control" value="{{= Created}}" nam name="add_ds_desc" readonly="readonly">
+    </div>
+    <div class="input-group" style="margin-top:10px;">
+        <span class="input-group-addon btn-w-m">修改时间</span><input id="Description" type="text" class="form-control" value="{{= Modified}}" na name="add_ds_desc" readonly="readonly">
+    </div>
+
+</script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/Helper/helper.js"></script>
+<script type="text/javascript">
+
+    //全局参数
+    var id = Helpers.getURLParameter('id');
+
+    $(function () {
+
+        loadData();
+
+    })
+
+    function loadData() {
+
+        $.ajax({
+            url: '/HotelOrder/GetById',
+            type: 'GET',
+            data: { id: id },
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#hotel_order_detail').html('');
+                $('#hotel-order-detail-tpl').tmpl(data).appendTo('#hotel_order_detail');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+</script>

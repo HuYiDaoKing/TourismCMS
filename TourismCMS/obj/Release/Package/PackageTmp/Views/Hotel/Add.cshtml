@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">酒店管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>添加</strong>
+            </li>
+        </ol>
+        <div class="text-center" style="color:#CC0000;font-size:24px;">
+            <span id="noticInfo"></span><!--显示服务器返回的提示信息-->
+        </div>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加</h5>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" action="">
+                        <div class="modal-body">
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">名字</span><input id="Name" type="text" class="form-control" placeholder="必填" value="" name="add_kr_name">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">电话</span><input id="Phone" type="text" class="form-control" placeholder="必填" value="" name="add_kr_name">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">地址</span><input id="Address" type="text" class="form-control" placeholder="必填" value="" name="add_kr_name">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="" name="add_ds_price">
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <input id="btnAdd" type="button" value="完成" class="btn btn-primary btn-w-m">
+                            @*<input type="reset" value="取消" class="btn btn-white btn-w-m">*@
+                            <input type="reset" value="返回" onclick="Helpers.GoBack();" class="btn btn-white btn-w-m">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+
+        $("#btnAdd").click(function () {
+
+            Add();
+        })
+
+    })
+
+    function Add() {
+
+        var strName = $('#Name').val();
+        var strPhone = $('#Phone').val();
+        var strAddress = $('#Address').val();
+        var strDescription = $('#Description').val();
+
+        if (Helpers.IsNullOrEmpty(strName) || Helpers.IsNullOrEmpty(strPhone) || Helpers.IsNullOrEmpty(strAddress)) {
+            showMsg('必填字段不能为空!');
+            return;
+        }
+
+        //if (!Helpers.CheckMobile(strPhone))
+        //{
+        //    showMsg('请输入正确手机号码!');
+        //    return;
+        //}
+
+        $.ajax({
+            url: '/Hotel/Insert',
+            type: 'POST',
+            data: {
+                strName: strName,
+                strPhone: strPhone,
+                strAddress:strAddress,
+                strDescription: strDescription
+            },
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                showMsg(data.Notice);
+                if (data.Bresult) {
+                    window.location.href = '/Hotel/Index';
+                } else {
+                    bootbox.alert(data.Notice);
+                }
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+
+        });
+    }
+
+    function showMsg(msg) {
+        $('#noticInfo').html('');
+        $('#noticInfo').html(msg);
+    }
+
+</script>
+

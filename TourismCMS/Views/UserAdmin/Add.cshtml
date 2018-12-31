@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">用户管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>添加</strong>
+            </li>
+        </ol>
+        <div class="text-center" style="color:#CC0000;font-size:24px;">
+            <span id="noticInfo"></span><!--显示服务器返回的提示信息-->
+        </div>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>添加</h5>
+        </div>
+        <div class="ibox-content">
+            <form method="get" action="">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="modal-body ">
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">名字</span><input id="Name" type="text" class="form-control" value="" name="add_kr_name">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">身份证</span><input id="IDCard" type="text" class="form-control" value="" name="add_kr_idcard">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">邮箱</span><input id="Email" type="text" class="form-control" value="" name="add_email_type">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">账号</span><input id="AccountId" type="text" placeholder="不能为空" class="form-control" value="" name="add_fj_accountId">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">密码</span><input id="Password" type="password" placeholder="不能为空" class="form-control" value="" name="add_fj_pwd">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">重复密码</span><input id="RePassword" type="password" placeholder="不能为空" class="form-control" value="" name="add_fj_repwd">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">手机</span><input id="Phone" type="text" class="form-control" value="" name="add_floor_Phone">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">职位</span><input id="Position" type="text" class="form-control" value="" name="add_sm_price">
+                            </div>
+                            <div class="input-group" style="margin-top:10px;">
+                                <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="" name="add_ds_price">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input id="btnAdd" type="button" value="完成" class="btn btn-primary btn-w-m">
+                            @*<input type="reset" value="取消" class="btn btn-white btn-w-m">*@
+                            <input type="reset" value="返回" onclick="Helpers.GoBack();" class="btn btn-white btn-w-m">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+
+        $("#btnAdd").click(function () {
+
+            Add();
+        })
+
+    })
+
+    function Add() {
+        var strName = $('#Name').val();
+        var strIDCard = $('#IDCard').val();
+        var strEmail = $('#Email').val();
+        var strAccountId = $('#AccountId').val();
+        var strPassword = $('#Password').val();
+        var strRePassword = $('#RePassword').val();
+        var strPhone = $('#Phone').val();
+        var strPosition = $('#Position').val();
+        var strDescription = $('#Description').val();
+
+        if (Helpers.IsNullOrEmpty(strName)
+            || Helpers.IsNullOrEmpty(strAccountId)
+            || Helpers.IsNullOrEmpty(strPassword)
+            || Helpers.IsNullOrEmpty(strRePassword)) {
+            showMsg('必填字段不能为空!');
+            return;
+        }
+
+        if (strPassword != strRePassword) {
+            showMsg('两次输入密码不一致!');
+            return;
+        }
+        $.ajax({
+            url: '/UserAdmin/Insert',
+            type: 'POST',
+            data: {
+                strName: strName,
+                strIDCard: strIDCard,
+                strEmail: strEmail,
+                strAccountId: strAccountId,
+                strPassword: strPassword,
+                strPhone: strPhone,
+                strPosition: strPosition,
+                strDescription: strDescription
+            },
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#noticInfo').html('');
+                $('#noticInfo').html(data.Notice);
+                if (data.Bresult) {
+                    window.location.href = '/UserAdmin/Index';
+                }
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+
+        });
+    }
+
+    function showMsg(msg) {
+        $('#noticInfo').html('');
+        $('#noticInfo').html(msg);
+    }
+
+</script>

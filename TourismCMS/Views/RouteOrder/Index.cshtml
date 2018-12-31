@@ -1,0 +1,1140 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .table_column_hidden {
+        display: none;
+    }
+</style>
+
+<!--- seller combo tpl-->
+<script id="search-seller-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---collect status combo tpl-->
+<script id="collect-status-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---balance status combo tpl-->
+<script id="balance-status-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+
+<!---review status combo tpl-->
+<script id="review-status-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---hotel combo tpl-->
+<script id="route-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---channel combo tpl-->
+<script id="channel-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---supplier combo tpl-->
+<script id="supplier-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>
+
+<!---hotel order table tpl-->
+<script id="route-order-table-tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td>
+            <div class="i-checks">
+                <label class="checkbox_btn">
+                    <input type="checkbox" value="{{= Id}}" name="test">
+                </label>
+            </div>
+        </td>
+        <td class="table_column_hidden">{{= Id}}</td>
+        <td class="table_column_hidden">{{= SellerId}}</td>
+        <td class="table_column_hidden">{{= RouteId}}</td>
+        <td class="table_column_hidden">{{= ChannelId}}</td>
+        <td class="table_column_hidden">{{= SupplierId}}</td>
+        <td>{{= Seller}}</td>
+        <td>{{= Route}}</td>
+        <td>{{= StartDate}}/{{= EndDate}}</td>
+        <td>{{= GuestName}}/{{= GuestPhone}}</td>
+        <td>{{= AdultNum}}/{{= AdultOriginalPrice }}/{{= AdultSellPrice}}</td>
+        <td>{{= ChildNum}}/{{= ChildOriginalPrice }}/{{= ChildSellPrice}}</td>
+        <td>{{= ExtrasOriginPrice }}/{{= ExtrasSellPrice}}</td>
+        <td>{{= BookTime}}</td>
+        <td>{{= ProxyIncome}}</td>
+        <td>{{= ShouldPay}}</td>
+        <td>{{= ShouldCollect}}</td>
+        <td>{{= Profit}}</td>
+        <td>{{= Channel}}</td>
+        <td>{{= Supplier}}</td>
+        <td>{{= Settlement}}</td>
+        @if (String.Equals(ViewData["RoleName"], "超级管理员"))
+        {
+            <td><a title="{{= BalanceRemark}}" href="#" onclick="updateBalanceStatus(this);">{{= BalanceStatus}}</a>/{{= BalanceDate}}</td>
+            <td><a title="{{= CollectMoneyRemark}}" href="#" onclick="updateCollectStatus(this)">{{= CollectMoneyStatus}}</a>/{{= CollectMoneyDate}}</td>
+        }
+        @*else
+            {
+                <td><a title="{{= BalanceRemark}}" href="javascript:void(0)" disabled="true">{{= BalanceStatus}}</a>/{{= BalanceDate}}</td>
+                <td><a title="{{= CollectMoneyRemark}}" href="javascript:void(0)" disabled="true">{{= CollectMoneyStatus}}</a>/{{= CollectMoneyDate}}</td>
+            }*@
+
+        <td>{{= ReviewStatus}}</td>
+        <td style="width:200px;">{{= Description}}</td>
+        <td class="center">
+            @if (String.Equals(ViewData["RoleName"], "超级管理员"))
+            {
+                <a class="btn-link" href="#" onclick="review(this);">审查</a>
+            }
+            @*<a class="btn-link" href="/RouteOrder/Add">添加</a>*@
+            <a class="blue" title="详细" data-placement="bottom" data-rel="tooltip" href="/RouteOrder/Detail?id={{= Id}}">
+                @*<i class="ace-icon fa fa-search-plus bigger-130"></i>*@
+                详细
+            </a>
+            <a class="green" title="修改" data-placement="bottom" data-rel="tooltip" href="javascript:void(0)" onclick="update(this);">
+                @*<i class="ace-icon fa fa-pencil bigger-130"></i>*@
+                修改
+            </a>
+            <a class="btn-link" href="#" onclick="delete_click({{= Id}});">删除</a>
+        </td>
+    </tr>
+</script>
+
+<!--statistics tpl-->
+<script id="statistics-tpl" type="text/x-jquery-tmpl">
+    <span class="font-bold">统计</span>&nbsp;&nbsp;
+    <span>成人总数：{{= TotalAdults}}</span>&nbsp;&nbsp;
+    <span>小孩总数：{{= TotalChild}}</span>&nbsp;&nbsp;
+    <span>总成本：{{= TotalCost}}</span>&nbsp;&nbsp;
+    <span>销售总额：{{= TotalSell}}</span>&nbsp;&nbsp;
+    <span>利润：{{= TotalProfit}}</span>&nbsp;&nbsp;
+    <span>代收总额：{{= TotalProxy}}</span>&nbsp;&nbsp;
+    <span>应付总额：{{= TotalPay}}</span>
+    <span>应收总额：{{= TotalCollect}}</span>
+</script>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>线路订单</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">线路订单</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>列表</strong>
+            </li>
+        </ol>
+        <div class="text-center" style="color:#CC0000;font-size:24px;">
+            <span id="message_info"></span><!--显示服务器返回的提示信息-->
+        </div>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>线路订单</h5>
+                </div>
+                <div class="ibox-title">
+                    <a class="btn btn-w-m btn-info" href="/RouteOrder/Add">添加</a>
+                    @*<button type="button" class="btn btn-w-m btn-danger" id="delete_btn">删除</button>*@
+                </div>
+
+                <div class="ibox-content">
+                    <form method="get" action="" class="navbar-form no-padding" role="form">
+
+                        @*<div class="hr-line-dashed"></div>
+                            <div class="input-group" id="data_5">
+                                <span class="input-group-btn">
+                                    <button tabindex="-1" class="btn btn-white" type="button">时间区间</button>
+                                </span>
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <input type="text" class="form-control" name="start" value="05/14/2014" />
+                                    <span class="input-group-addon">to</span>
+                                    <input type="text" class="form-control" name="end" value="05/22/2014" />
+                                </div>
+                            </div>*@
+                        <div class="input-group" style="margin-left:15px;">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">供应商</button>
+                            </span>
+                            <span class="input-group-btn">
+                                <select class="btn btn-white" id="search_supplier_combo"></select>
+                            </span>
+                        </div>
+                        @if (String.Equals(ViewData["RoleName"], "超级管理员"))
+                        {
+                            <div class="input-group" style="margin-right:15px;">
+
+                                <span class="input-group-btn">
+                                    <button tabindex="-1" class="btn btn-white" type="button">销售员</button>
+                                </span>
+                                <span class="input-group-btn">
+                                    <select class="btn btn-white" id="search_seller_combo"></select>
+                                </span>
+                            </div>
+                        }
+
+
+
+                        <div class="input-group" style="margin-left:15px;">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">结算状态</button>
+                            </span>
+                            <div class="i-checks">
+                                <select class="btn btn-white" id="search_balacnestatus_combo"></select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="input-group" style="margin-left:15px;">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">收款状态</button>
+                            </span>
+                            <div class="i-checks">
+                                <select class="btn btn-white" id="search_collectstatus_combo"></select>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-right:15px;">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">结算类型</button>
+                            </span>
+                            <div class="i-checks">
+                                <select class="btn btn-white" id="search_settlement_combo">
+                                    <option value="全部">全部</option>
+                                    <option value="挂账">挂账</option>
+                                    <option value="返佣">返佣</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        @*<div class="input-group" id="data_1" style="margin-left:15px;">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">去程时间</span><input id="search_startdate" type="text" class="form-control" value="">
+                                </div>
+                            </div>*@
+                        <div class="hr-line-dashed"></div>
+                        <div class="input-group" style="margin-left:15px;">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">线路名称</button>
+                            </span>
+                            <span class="input-group-btn">
+                                <select class="btn btn-white" id="search_route_combo"></select>
+                            </span>
+                        </div>
+                        <div class="input-group" style="margin-left:15px;">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">渠道来源</button>
+                            </span>
+                            <span class="input-group-btn">
+                                <select class="btn btn-white" id="search_channel_combo"></select>
+                            </span>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="input-group">
+                            <div class="input-group" id="data_5">
+                                <span class="input-group-btn">
+                                    <select class="btn btn-white" id="search_flag_combo">
+                                        @*<option value="入住时间">入住时间</option>*@
+                                        <option value="预定时间">预定时间</option>
+                                        <option value="结算时间">结算时间</option>
+                                        <option value="收款时间">收款时间</option>
+                                    </select>
+                                </span>
+                                <span class="input-group-btn">
+                                    <button tabindex="-1" class="btn btn-white" type="button">时间区间</button>
+                                </span>
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <input type="text" class="form-control" id="search_startdate" name="start" value="" />
+                                    <span class="input-group-addon">到</span>
+                                    <input type="text" class="form-control" id="search_enddate" name="end" value="" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">客人姓名</button>
+                            </span>
+                            <input id="search_guestname" type="text" class="form-control">
+
+                            <span class="input-group-btn">
+                                <button tabindex="-1" class="btn btn-white" type="button">电话</button>
+                            </span>
+                            <input id="search_guestphone" type="text" class="form-control">
+                            <div class="input-group-btn">
+                                <button onclick="search_click();" type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="ibox-content">
+                    <!--增加最小宽度 防止挤压-->
+                    <div class="table-responsive">
+                        <table class="table table-striped" data-page-size="8" data-filter=#filter style="min-width:1743px;">
+                            <thead>
+                                <tr>
+                                    <th id="check_all" style="cursor:pointer;">全选</th>
+                                    <th>销售员</th>
+                                    <th>线路名称</th>
+                                    <th>去/回程时间</th>
+                                    <th>姓名/电话</th>
+                                    <th>成人/底价/售卖价</th>
+                                    <th>儿童/底价/售卖价</th>
+                                    <th>杂费/底价/售卖价</th>
+                                    <th>预定时间</th>
+                                    <th>代收</th>
+                                    <th>应付</th>
+                                    <th>应收</th>
+                                    <th>利润</th>
+                                    <th>销售渠道</th>
+                                    <th>供应商</th>
+                                    <th>结算类型</th>
+                                    @if (String.Equals(ViewData["RoleName"], "超级管理员"))
+                                    {
+                                        <th>结算状态/时间</th>
+                                        <th>收款状态/时间</th>
+                                    }
+                                    <th>审核状态</th>
+                                    <th>描述</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="route_order_table">
+                                @*<tr>
+                                        <td>
+                                            <div class="i-checks">
+                                                <label class="checkbox_btn">
+                                                    <input type="checkbox" value="1" name="test">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>向琴</td>
+                                        <td>罗浮山温泉宾馆</td>
+                                        <td>2015/11/11-2015/11/12</td>
+                                        <td>李明13890997789</td>
+                                        <td>豪标</td>
+                                        <td>2</td>
+                                        <td>300\330</td>
+                                        <td>0</td>
+                                        <td>600</td>
+                                        <td>美团</td>
+                                        <td>罗浮山温泉宾馆</td>
+                                        <td>
+                                            <button class="btn-link">结算</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn-link">收款</button>
+                                        </td>
+                                        <td class="center">
+                                            <button class="btn-link" data-toggle="modal" data-target="#myModal6"><i class="fa fa-search"></i></button>
+                                            <button class="btn-link" data-toggle="modal" data-target="#myModal5"><i class="fa fa-pencil" style="color:#3498bd;"></i></button>
+                                            <button class="btn-link"><i class="fa fa-trash-o" style="color:#c0392b;"></i></button>
+                                        </td>
+                                        <input type="hidden" name="country" value="" />
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="i-checks">
+                                                <label class="checkbox_btn">
+                                                    <input type="checkbox" value="35" name="test">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>向琴</td>
+                                        <td>罗浮山温泉宾馆</td>
+                                        <td>2015/11/11-2015/11/12</td>
+                                        <td>李明13890997789</td>
+                                        <td>豪标</td>
+                                        <td>2</td>
+                                        <td>300\330</td>
+                                        <td>0</td>
+                                        <td>600</td>
+                                        <td>美团</td>
+                                        <td>罗浮山温泉宾馆</td>
+                                        <td>
+                                            2015/11/11
+                                        </td>
+                                        <td></td>
+                                        <td class="center">
+                                            <button class="btn-link" data-toggle="modal" data-target="#myModal6"><i class="fa fa-search"></i></button>
+                                            <button class="btn-link" data-toggle="modal" data-target="#myModal5"><i class="fa fa-pencil" style="color:#3498bd;"></i></button>
+                                            <button class="btn-link"><i class="fa fa-trash-o" style="color:#c0392b;"></i></button>
+                                        </td>
+                                        <input type="hidden" name="country" value="" />
+                                    </tr>*@
+                            </tbody>
+                        </table>
+
+                        <div class="btn-group pull-right">
+                            <p id="pageIndex" style="font-size:20px;font-weight:bold;color:blue;margin-left:150px;"></p>
+                            <input id="pageStart" type="text" style="display:none" />
+                            <ul class="pagination"></ul>
+                        </div>
+
+                        <div class="pull-left" id="statistics">
+                            @*<span>成人总数：15</span>&nbsp;&nbsp;
+                                <span>小孩总数：</span>&nbsp;&nbsp;
+                                <span>成本总额：</span>&nbsp;&nbsp;
+                                <span>销售总额：</span>&nbsp;&nbsp;
+                                <span>利润：</span>&nbsp;&nbsp;
+                                <span>代收总额：</span>&nbsp;&nbsp;
+                                <span>应付总额：</span>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑弹出框-->
+<div class="modal inmodal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="get" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">编辑信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group date margin-top-10 table_column_hidden">
+                        <span class="input-group-addon btn-w-m">ID</span><input id="Id" type="text" class="form-control" value="">
+                    </div>
+                    <div class="input-group date" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">线路</span>
+                        <select class="btn btn-white" id="routecombo"></select>
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">渠道</span><select class="btn btn-white" id="channelcombo"></select>
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">供应商</span>
+                        <select class="btn btn-white" id="suppliercombo"></select>
+                    </div>
+                    <div class="input-group date" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">预定时间</span><input id="BookTime" type="text" class="form-control" value="" name="add_rz_time">
+                    </div>
+                    <div class="input-group date" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">去程时间</span><input id="StartDate" type="text" class="form-control" value="" name="add_rz_time">
+                    </div>
+                    <div class="input-group date" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">回程时间</span><input id="EndDate" type="text" class="form-control" value="" name="add_lk_time">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">姓名</span><input id="GuestName" type="text" class="form-control" value="" name="add_kr_name">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">电话</span><input id="GuestPhone" type="text" class="form-control" value="" name="add_kr_phone">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">成人数</span><input id="AdultNum" type="text" class="form-control" value="" name="add_room_type">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">成人(底价)</span><input id="AdultOriginalPrice" type="text" class="form-control" value="" name="add_room_type">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">成人(售卖价)</span><input id="AdultSellPrice" type="text" class="form-control" value="" name="add_room_type">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">儿童数</span><input id="ChildNum" type="text" class="form-control" value="" name="add_room_type">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">儿童(底价)</span><input id="ChildOriginalPrice" type="text" class="form-control" value="" name="add_room_type">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">儿童(售卖价)</span><input id="ChildSellPrice" type="text" class="form-control" value="" name="add_room_type">
+                    </div>
+
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">杂费(底价)</span><input id="ExtrasOriginPrice" type="text" class="form-control" value="" name="add_room_type" placeholder="必填">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">杂费(售卖价)</span><input id="ExtrasSellPrice" type="text" class="form-control" value="" name="add_room_type" placeholder="必填">
+                    </div>
+
+
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">代收</span><input id="ProxyIncome" type="text" class="form-control" value="" name="add_ds_price">
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="" name="add_ds_desc">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" onclick="update_click();" value="完成" class="btn btn-primary btn-w-m">
+                    <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--评审弹出框-->
+<div class="modal inmodal fade" id="reviewModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="get" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">编辑信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group date margin-top-10 table_column_hidden">
+                        <span class="input-group-addon btn-w-m">ID</span><input id="Id" type="text" class="form-control" value="">
+                    </div>
+                    <div class="input-group margin-top-10">
+                        <span class="input-group-addon btn-w-m">评审状态</span>
+                        <span class="input-group-btn">
+                            <select class="btn btn-white" id="reviewstatuscombo">
+                                @*<option value="0">通过</option>
+                                    <option value="1">驳回</option>*@
+                            </select>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" onclick="review_click();" value="完成" class="btn btn-primary btn-w-m">
+                    <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--结算状态弹出框-->
+<div class="modal inmodal fade" id="balanceModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="get" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">编辑状态</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group date margin-top-10 table_column_hidden">
+                        <span class="input-group-addon btn-w-m">ID</span><input id="Id" type="text" class="form-control" value="">
+                    </div>
+                    <div class="input-group margin-top-10">
+                        <span class="input-group-addon btn-w-m">结算状态</span>
+                        @*<span class="input-group-btn">*@
+                        <select class="btn btn-white" id="balacnestatuscombo"></select>
+                        @*</span>*@
+                    </div>
+                    <div class="input-group date margin-top-10">
+                        <span class="input-group-addon btn-w-m">备注</span><input id="BalanceRemark" type="text" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" onclick="balance_click();" value="完成" class="btn btn-primary btn-w-m">
+                    <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--收款状态弹出框-->
+<div class="modal inmodal fade" id="collectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="get" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">编辑状态</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group date margin-top-10 table_column_hidden">
+                        <span class="input-group-addon btn-w-m">ID</span><input id="Id" type="text" class="form-control" value="">
+                    </div>
+                    <div class="input-group margin-top-10">
+                        <span class="input-group-addon btn-w-m">结算状态</span>
+                        <select class="btn btn-white" id="collectstatuscombo"></select>
+                    </div>
+                    <div class="input-group date margin-top-10">
+                        <span class="input-group-addon btn-w-m">备注</span><input id="CollectMoneyRemark" type="text" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" onclick="collect_click();" value="完成" class="btn btn-primary btn-w-m">
+                    <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/RouteOrder/RouteOrder.js"></script>
+<style>
+    .pagination {
+        font-weight: bold;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+        $("#check_all").click(function () {
+            //alert("111");
+            $(".checkbox_btn").click();
+        });
+
+        getPageRouteOrders(0);
+        getStatics();
+
+        //批量删除
+        $("#delete_btn").click(function () {
+            var obj = document.getElementsByName('test');
+            var s = '';
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) s += obj[i].value + ',';
+            }
+
+            delete_click(s);
+        });
+
+        $('#BookTime').datepicker({
+            todayBtn: "linked",
+            format: "yyyy-mm-dd",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+        $('#StartDate').datepicker({
+            todayBtn: "linked",
+            format: "yyyy-mm-dd",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+        $('#EndDate').datepicker({
+            todayBtn: "linked",
+            format: "yyyy-mm-dd",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+        //初始化下拉列表
+        createRouteCombo();
+        createChannelCombo();
+        createSupplierCombo();
+        createReviewStatusCombo();
+        createBalanceStatusCombo();
+        createCollectStatusCombo();
+        createSellerCombo();
+    })
+
+    //酒店下拉
+    function createRouteCombo() {
+
+        $.ajax({
+            url: '/Combo/GetRouteComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#routecombo').html('');
+                $('#route-combo-tpl').tmpl(data).appendTo('#routecombo');
+
+                $('#search_route_combo').html('');
+                $('#route-combo-tpl').tmpl(data).appendTo('#search_route_combo');
+
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+    //渠道下拉
+    function createChannelCombo() {
+
+        $.ajax({
+            url: '/Combo/GetChannelComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            data: { type: '线路' },
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#channelcombo').html('');
+                $('#channel-combo-tpl').tmpl(data).appendTo('#channelcombo');
+
+                $('#search_channel_combo').html('');
+                $('#channel-combo-tpl').tmpl(data).appendTo('#search_channel_combo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+    //供应商下拉
+    function createSupplierCombo() {
+
+        $.ajax({
+            url: '/Combo/GetSupplierComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            data: { type: '线路' },
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#suppliercombo').html('');
+                $('#supplier-combo-tpl').tmpl(data).appendTo('#suppliercombo');
+
+                $('#search_supplier_combo').html('');
+                $('#supplier-combo-tpl').tmpl(data).appendTo('#search_supplier_combo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+
+    }
+
+    //评审状态下拉
+    function createReviewStatusCombo() {
+
+        $.ajax({
+            url: '/Combo/GetReviewStatusComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#reviewstatuscombo').html('');
+                $('#review-status-combo-tpl').tmpl(data).appendTo('#reviewstatuscombo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+    }
+
+    //banlance状态下拉
+    function createBalanceStatusCombo() {
+
+        $.ajax({
+            url: '/Combo/GetBalanceStatusComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#balacnestatuscombo').html('');
+                $('#balance-status-combo-tpl').tmpl(data).appendTo('#balacnestatuscombo');
+
+                $('#search_balacnestatus_combo').html('');
+                $('#balance-status-combo-tpl').tmpl(data).appendTo('#search_balacnestatus_combo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+    }
+
+    //collect状态下拉
+    function createCollectStatusCombo() {
+
+        $.ajax({
+            url: '/Combo/GetCollectStatusComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#collectstatuscombo').html('');
+                $('#collect-status-combo-tpl').tmpl(data).appendTo('#collectstatuscombo');
+
+                $('#search_collectstatus_combo').html('');
+                $('#collect-status-combo-tpl').tmpl(data).appendTo('#search_collectstatus_combo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+    }
+
+    //seller状态下拉
+    function createSellerCombo() {
+
+        $.ajax({
+            url: '/Combo/GetSellerComboData',
+            type: 'GET',
+            async: false,
+            timeout: 1000,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#search_seller_combo').html('');
+                $('#search-seller-combo-tpl').tmpl(data).appendTo('#search_seller_combo');
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+
+            },
+            error: function (xhr) {
+            }
+        });
+    }
+
+    function showMsg(message) {
+        $('#message_info').html('');
+        $('#message_info').html(message);
+    }
+
+</script>
+
+<!-- 获取选中复选框的value值 -->
+<script>
+    $(document).ready(function () {
+        $("#delete_btn").click(function () {
+            //alert("111");
+            //alert($('input:checked').length);
+            var obj = document.getElementsByName('test');
+            var s = '';
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) s += obj[i].value + ',';
+            }
+            //alert("你选中的复选框的value值是" + s);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+
+        var $image = $(".image-crop > img")
+        $($image).cropper({
+            aspectRatio: 1.618,
+            preview: ".img-preview",
+            done: function (data) {
+                // Output the result data for cropping image.
+            }
+        });
+
+        var $inputImage = $("#inputImage");
+        if (window.FileReader) {
+            $inputImage.change(function () {
+                var fileReader = new FileReader(),
+                        files = this.files,
+                        file;
+
+                if (!files.length) {
+                    return;
+                }
+
+                file = files[0];
+
+                if (/^image\/\w+$/.test(file.type)) {
+                    fileReader.readAsDataURL(file);
+                    fileReader.onload = function () {
+                        $inputImage.val("");
+                        $image.cropper("reset", true).cropper("replace", this.result);
+                    };
+                } else {
+                    showMessage("Please choose an image file.");
+                }
+            });
+        } else {
+            $inputImage.addClass("hide");
+        }
+
+        $("#download").click(function () {
+            window.open($image.cropper("getDataURL"));
+        });
+
+        $("#zoomIn").click(function () {
+            $image.cropper("zoom", 0.1);
+        });
+
+        $("#zoomOut").click(function () {
+            $image.cropper("zoom", -0.1);
+        });
+
+        $("#rotateLeft").click(function () {
+            $image.cropper("rotate", 45);
+        });
+
+        $("#rotateRight").click(function () {
+            $image.cropper("rotate", -45);
+        });
+
+        $("#setDrag").click(function () {
+            $image.cropper("setDragMode", "crop");
+        });
+
+        $('#data_1 .input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+
+        $('#data_2 .input-group.date').datepicker({
+            startView: 1,
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+
+        $('#data_3 .input-group.date').datepicker({
+            startView: 2,
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+
+        $('#data_4 .input-group.date').datepicker({
+            minViewMode: 1,
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true,
+            format: "yyyy-mm-dd"
+        });
+
+        $('#data_5 .input-daterange').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+
+        var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, { color: '#1AB394' });
+
+        var elem_2 = document.querySelector('.js-switch_2');
+        var switchery_2 = new Switchery(elem_2, { color: '#ED5565' });
+
+        var elem_3 = document.querySelector('.js-switch_3');
+        var switchery_3 = new Switchery(elem_3, { color: '#1AB394' });
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+
+        $('.demo1').colorpicker();
+
+        var divStyle = $('.back-change')[0].style;
+        $('#demo_apidemo').colorpicker({
+            color: divStyle.backgroundColor
+        }).on('changeColor', function (ev) {
+            divStyle.backgroundColor = ev.color.toHex();
+        });
+
+        $('.clockpicker').clockpicker();
+
+        $('input[name="daterange"]').daterangepicker();
+
+        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+
+        $('#reportrange').daterangepicker({
+            format: "yyyy-mm-dd",
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment(),
+            minDate: '01/01/2012',
+            maxDate: '12/31/2015',
+            dateLimit: { days: 60 },
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,
+            timePickerIncrement: 1,
+            timePicker12Hour: true,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            opens: 'right',
+            drops: 'down',
+            buttonClasses: ['btn', 'btn-sm'],
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-default',
+            separator: ' to ',
+            locale: {
+                applyLabel: 'Submit',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        });
+
+        $(".select2_demo_1").select2();
+        $(".select2_demo_2").select2();
+        $(".select2_demo_3").select2({
+            placeholder: "Select a state",
+            allowClear: true
+        });
+
+
+    });
+    var config = {
+        '.chosen-select': {},
+        '.chosen-select-deselect': { allow_single_deselect: true },
+        '.chosen-select-no-single': { disable_search_threshold: 10 },
+        '.chosen-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chosen-select-width': { width: "95%" }
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+    $("#ionrange_1").ionRangeSlider({
+        min: 0,
+        max: 5000,
+        type: 'double',
+        prefix: "$",
+        maxPostfix: "+",
+        prettify: false,
+        hasGrid: true
+    });
+
+    $("#ionrange_2").ionRangeSlider({
+        min: 0,
+        max: 10,
+        type: 'single',
+        step: 0.1,
+        postfix: " carats",
+        prettify: false,
+        hasGrid: true
+    });
+
+    $("#ionrange_3").ionRangeSlider({
+        min: -50,
+        max: 50,
+        from: 0,
+        postfix: "°",
+        prettify: false,
+        hasGrid: true
+    });
+
+    $("#ionrange_4").ionRangeSlider({
+        values: [
+            "January", "February", "March",
+            "April", "May", "June",
+            "July", "August", "September",
+            "October", "November", "December"
+        ],
+        type: 'single',
+        hasGrid: true
+    });
+
+    $("#ionrange_5").ionRangeSlider({
+        min: 10000,
+        max: 100000,
+        step: 100,
+        postfix: " km",
+        from: 55000,
+        hideMinMax: true,
+        hideFromTo: false
+    });
+
+    $(".dial").knob();
+
+    $("#basic_slider").noUiSlider({
+        start: 40,
+        behaviour: 'tap',
+        connect: 'upper',
+        range: {
+            'min': 20,
+            'max': 80
+        }
+    });
+
+    $("#range_slider").noUiSlider({
+        start: [40, 60],
+        behaviour: 'drag',
+        connect: true,
+        range: {
+            'min': 20,
+            'max': 80
+        }
+    });
+
+    $("#drag-fixed").noUiSlider({
+        start: [40, 60],
+        behaviour: 'drag-fixed',
+        connect: true,
+        range: {
+            'min': 20,
+            'max': 80
+        }
+    });
+
+</script>
+

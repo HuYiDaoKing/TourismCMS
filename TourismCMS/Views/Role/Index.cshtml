@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .table_column_hidden {
+        display: none;
+    }
+</style>
+
+
+<!---role table tpl-->
+<script id="role-table-tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td>
+            <div class="i-checks">
+                <label class="checkbox_btn">
+                    <input type="checkbox" value="{{= Id}}" name="test">
+                </label>
+            </div>
+        </td>
+        <td class="table_column_hidden">{{= Id}}</td>
+        <td>{{= Name}}</td>
+        <td>{{= Description}}</td>
+        <td>{{= Created}}</td>
+        <td>{{= Modified}}</td>
+        @*<td>
+                <button class="btn-link">结算</button>
+            </td>
+            <td>
+                <button class="btn-link">收款</button>
+            </td>*@
+        <td class="center">
+            <a class="btn-link" href="/Role/Add">添加</a>
+            @*<a class="btn-link" href="/Role/Detail?id={{= Id}}">详细</a>*@
+            <button class="btn-link" onclick="update(this);">修改@*<i class="fa fa-pencil" style="color:#3498bd;"></i>*@</button>
+
+        </td>
+    </tr>
+</script>
+
+<!---user combo tpl-->
+@*<script id="role-combo-tpl" type="text/x-jquery-tmpl">
+    <option value="{{= Id}}">{{= Text}}</option>
+</script>*@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>角色管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">角色管理</a>
+            </li>
+            <li>
+                <a>管理列表</a>
+            </li>
+            <li class="active">
+                <strong>列表</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>角色管理</h5>
+                </div>
+                <div class="ibox-title">
+                    @*<button type="button" class="btn btn-w-m btn-info" id="add_btn">添加</button>*@
+                    <a class="btn btn-w-m btn-info" href="/Role/Add">添加</a>
+                    <button type="button" class="btn btn-w-m btn-danger" id="delete_btn">删除</button>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" action="" class="navbar-form no-padding" role="form">
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-striped" data-page-size="8" data-filter=#filter>
+                            <thead>
+                                <tr>
+                                    <th id="check_all" style="cursor:pointer;">全选</th>
+                                    @*<th>ID</th>*@
+                                    <th>角色名</th>
+                                    <th>描述</th>
+                                    <th>创建日期</th>
+                                    <th>修改日期</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="role_table">
+                            </tbody>
+                        </table>
+                        <div class="btn-group pull-right">
+                            <p id="pageIndex" style="font-size:20px;font-weight:bold;color:blue;margin-left:150px;"></p>
+                            <input id="pageStart" type="text" style="display:none" />
+                            <ul class="pagination"></ul>
+                        </div>
+                        @*<div class="pull-left">
+                                <span class="font-bold">统计</span>&nbsp;&nbsp;
+                                <span>房间间夜总数：15</span>&nbsp;&nbsp;
+                                <span>总成本：</span>&nbsp;&nbsp;
+                                <span>销售总额：</span>&nbsp;&nbsp;
+                                <span>利润：</span>&nbsp;&nbsp;
+                                <span>代收总额：</span>&nbsp;&nbsp;
+                                <span>应付总额：</span>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改窗体-->
+<div class="modal inmodal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="get" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">编辑信息</h4>
+                    <div class="text-center" style="color:#CC0000;font-size:24px;">
+                        <span id="noticInfo"></span><!--显示服务器返回的提示信息-->
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group date margin-top-10 table_column_hidden">
+                        <span class="input-group-addon btn-w-m">ID</span><input id="Id" type="text" class="form-control" value="">
+                    </div>
+                    <div class="input-group margin-top-10">
+                        <span class="input-group-addon btn-w-m">名字</span><input id="Name" type="text" class="form-control" value="">
+                    </div>
+                    <div class="input-group margin-top-10">
+                        <span class="input-group-addon btn-w-m">描述</span><input id="Description" type="text" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input onclick="update_click();" type="button" value="完成" class="btn btn-primary btn-w-m">
+                    <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/Role/Role.js"></script>
+
+<style>
+    .pagination {
+        font-weight: bold;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+        $("#check_all").click(function () {
+            //alert("111");
+            $(".checkbox_btn").click();
+        });
+
+        getPageRoles(0);
+
+        //批量删除
+        $("#delete_btn").click(function () {
+            var obj = document.getElementsByName('test');
+            var s = '';
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) s += obj[i].value + ',';
+            }
+            //alert('你选中的是:' + s);
+            delete_click(s);
+        });
+    })
+
+
+
+</script>
+

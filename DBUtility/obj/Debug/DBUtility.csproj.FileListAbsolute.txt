@@ -1,0 +1,9 @@
+D:\.NET 开源项目研究\青旅项目\TourismCMS\DBUtility\bin\Debug\Maticsoft.DBUtility.dll
+D:\.NET 开源项目研究\青旅项目\TourismCMS\DBUtility\bin\Debug\Maticsoft.DBUtility.pdb
+D:\.NET 开源项目研究\青旅项目\TourismCMS\DBUtility\obj\Debug\Maticsoft.DBUtility.dll
+D:\.NET 开源项目研究\青旅项目\TourismCMS\DBUtility\obj\Debug\Maticsoft.DBUtility.pdb
+E:\开源项目\TourismCMS\TourismCMS\DBUtility\bin\Debug\Maticsoft.DBUtility.dll
+E:\开源项目\TourismCMS\TourismCMS\DBUtility\bin\Debug\Maticsoft.DBUtility.pdb
+E:\开源项目\TourismCMS\TourismCMS\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+E:\开源项目\TourismCMS\TourismCMS\DBUtility\obj\Debug\Maticsoft.DBUtility.dll
+E:\开源项目\TourismCMS\TourismCMS\DBUtility\obj\Debug\Maticsoft.DBUtility.pdb

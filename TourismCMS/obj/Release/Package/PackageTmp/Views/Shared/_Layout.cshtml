@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="~/Assert/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Assert/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Assert/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <!-- FooTable -->
+    <link href="~/Assert/css/plugins/footable/footable.core.css" rel="stylesheet" />
+
+    <link href="~/Assert/css/animate.css" rel="stylesheet" />
+    <link href="~/Assert/css/style.css" rel="stylesheet" />
+    <link href="~/Assert/css/plugins/datapicker/datepicker3.css" rel="stylesheet" />
+    @*<script src="~/Scripts/Helper/helper.js"></script>*@
+</head>
+@using System.Data.Entity;
+@using TourismCMS.EntityDataModel;
+@using TourismCMS.Helper;
+@using TourismCMS.Services;
+<body>
+
+    @{
+        string roleName = string.Empty;
+        int userId = 0;
+        TourismCMS.EntityDataModel.User currentUser = Session[AccountHashKeys.CurrentAdminUser] as TourismCMS.EntityDataModel.User;
+        if (currentUser != null)
+        {
+            UserRole userrole = UserRoleService.Instance.GetByUserId(currentUser.Id);
+            Role role = RoleService.Instance.GetById(userrole.RoleId);
+            roleName = role.Name;
+            userId = currentUser.Id;
+        }
+    }
+
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" src="~/Assert/img/profile_small.jpg" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        <strong class="font-bold">管理员</strong>
+                                    </span> <span class="text-muted text-xs block">管理员操作<b class="caret"></b></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="/Login/Logout">退出</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/UserAdmin/Personal/@userId"><i class="fa fa-diamond"></i> <span class="nav-label">个人设置</span></a>
+                    </li>
+                    @if (String.Equals(roleName, "超级管理员"))
+                    {
+                        <li>
+                            <a href="#"><i class="fa fa-table"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li class="active"><a href="/UserAdmin/Index">用户管理</a></li>
+                                <li><a href="/Role/Index">角色管理</a></li>
+                            </ul>
+                        </li>                        
+                        <li>
+                            <a href="#"><i class="fa fa-table"></i> <span class="nav-label">基础信息管理</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/Hotel/Index"><i class="fa fa-diamond"></i> <span class="nav-label">酒店管理</span></a>
+                                </li>
+                                <li>
+                                    <a href="/Ticket/Index"><i class="fa fa-diamond"></i> <span class="nav-label">门票管理</span></a>
+                                </li>
+                                <li>
+                                    <a href="/Route/Index"><i class="fa fa-diamond"></i> <span class="nav-label">线路管理</span></a>
+                                </li>
+                                <li>
+                                    <a href="/Channel/Index"><i class="fa fa-diamond"></i> <span class="nav-label">渠道管理</span></a>
+                                </li>
+                                <li>
+                                    <a href="/Supplier/Index"><i class="fa fa-diamond"></i> <span class="nav-label">供应商管理</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li>
+                        <a href="#"><i class="fa fa-table"></i> <span class="nav-label">订单管理</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="/HotelOrder/Index">酒店订单</a></li>
+                            <li><a href="/RouteOrder/Index">线路订单</a></li>
+                            <li><a href="/TicketOrder/Index">门票订单</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/UserAdmin/Index"><i class="fa fa-diamond"></i> <span class="nav-label">记账本</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-diamond"></i> <span class="nav-label">公告板</span></a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="/Login/Logout">
+                                <i class="fa fa-sign-out"></i> 退出
+                            </a>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+
+            @RenderBody()
+
+            <div class="footer">
+                <div class="pull-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Example Company &copy; 2014-2015
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="~/Assert/js/jquery-2.1.1.js"></script>
+    <script src="~/Assert/js/bootstrap.min.js"></script>
+    <script src="~/Assert/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Assert/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Assert/js/bootbox.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="~/Assert/js/inspinia.js"></script>
+    <script src="~/Assert/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="~/Assert/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- iCheck -->
+    <script src="~/Assert/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- FooTable -->
+    <script src="~/Assert/js/plugins/footable/footable.all.min.js"></script>
+
+    <!-- MENU -->
+    <script src="~/Assert/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Image cropper -->
+    <script src="~/Assert/js/plugins/cropper/cropper.min.js"></script>
+
+    <!--jquery.tmpl-->
+    <script src="~/Scripts/jquery.tmpl.js"></script>
+    <script src="~/Scripts/Helper/helper.js"></script>
+
+    <!--jBootstrapPage-->
+    <link href="~/Scripts/jBootstrapPage/jBootsrapPage.css" rel="stylesheet" />
+    <script src="~/Scripts/jBootstrapPage/jBootstrapPage.js"></script>
+    <style>
+        .pagination {
+            font-weight: bold;
+        }
+    </style>
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $('.footable').footable();
+
+
+            $('#date_added').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+
+            $('#date_modified').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TourismModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Channel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+    <Property Name="Type" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Hotel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="200" />
+    <Property Name="Address" Type="varchar" MaxLength="200" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+  </EntityType>
+  <EntityType Name="HotelOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="HotelId" Type="int" />
+    <Property Name="GuestName" Type="varchar" MaxLength="50" />
+    <Property Name="GuestPhone" Type="varchar" MaxLength="50" />
+    <Property Name="RoomType" Type="varchar" MaxLength="50" />
+    <Property Name="RoomNum" Type="int" />
+    <Property Name="OriginalPrice" Type="float" />
+    <Property Name="SellPrice" Type="float" />
+    <Property Name="BookTime" Type="datetime" />
+    <Property Name="StartDate" Type="date" />
+    <Property Name="EndDate" Type="date" />
+    <Property Name="ProxyIncome" Type="float" />
+    <Property Name="ChannelId" Type="int" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="BalanceStatus" Type="int" />
+    <Property Name="BalanceDate" Type="date" />
+    <Property Name="CollectMoneyStatus" Type="int" />
+    <Property Name="CollectMoneyDate" Type="date" />
+    <Property Name="ReviewStatus" Type="int" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+    <Property Name="HandlerId" Type="int" />
+    <Property Name="CheckerId" Type="int" />
+    <Property Name="BalanceRemark" Type="varchar" MaxLength="200" />
+    <Property Name="CollectMoneyRemark" Type="varchar" MaxLength="200" />
+    <Property Name="Settlement" Type="varchar" MaxLength="20" />
+    <Property Name="ModifierId" Type="int" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Route">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+  </EntityType>
+  <EntityType Name="RouteOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="RouteId" Type="int" />
+    <Property Name="GuestName" Type="varchar" MaxLength="50" />
+    <Property Name="GuestPhone" Type="varchar" MaxLength="50" />
+    <Property Name="AdultNum" Type="int" />
+    <Property Name="AdultOriginalPrice" Type="float" />
+    <Property Name="AdultSellPrice" Type="float" />
+    <Property Name="ChildNum" Type="int" />
+    <Property Name="ChildOriginalPrice" Type="float" />
+    <Property Name="ChildSellPrice" Type="float" />
+    <Property Name="BookTime" Type="datetime" />
+    <Property Name="StartDate" Type="date" />
+    <Property Name="EndDate" Type="date" />
+    <Property Name="ProxyIncome" Type="float" />
+    <Property Name="ChannelId" Type="int" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="BalanceDate" Type="date" />
+    <Property Name="CollectMoneyStatus" Type="int" />
+    <Property Name="CollectMoneyDate" Type="date" />
+    <Property Name="ReviewStatus" Type="int" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+    <Property Name="HandlerId" Type="int" />
+    <Property Name="CheckerId" Type="int" />
+    <Property Name="BalanceRemark" Type="varchar" MaxLength="200" />
+    <Property Name="CollectMoneyRemark" Type="varchar" MaxLength="200" />
+    <Property Name="BalanceStatus" Type="int" />
+    <Property Name="Settlement" Type="varchar" MaxLength="20" />
+    <Property Name="ExtrasOriginPrice" Type="float" />
+    <Property Name="ExtrasSellPrice" Type="float" />
+    <Property Name="modifier" Type="int" />
+    <Property Name="ModifierId" Type="int" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Manager" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="QQ" Type="varchar" MaxLength="50" />
+    <Property Name="WeChat" Type="varchar" MaxLength="50" />
+    <Property Name="AccountId" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="200" />
+    <Property Name="ProxyType" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+    <Property Name="Name" Type="varchar" MaxLength="20" />
+    <Property Name="Type" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="SupplierProduct">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplerId" Type="int" />
+    <Property Name="ProductId" Type="int" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+  </EntityType>
+  <EntityType Name="TicketOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ChannelId" Type="int" />
+    <Property Name="TicketId" Type="int" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="GuestName" Type="varchar" MaxLength="50" />
+    <Property Name="GuestPhone" Type="varchar" MaxLength="100" />
+    <Property Name="TicketNum" Type="int" />
+    <Property Name="TicketType" Type="varchar" MaxLength="50" />
+    <Property Name="OriginalPrice" Type="float" />
+    <Property Name="SellPrice" Type="float" />
+    <Property Name="BookTime" Type="datetime" />
+    <Property Name="UseDate" Type="date" />
+    <Property Name="ProxyIncome" Type="float" />
+    <Property Name="BalanceDate" Type="date" />
+    <Property Name="CollectMoneyStatus" Type="int" />
+    <Property Name="CollectMoneyDate" Type="date" />
+    <Property Name="ReviewStatus" Type="int" />
+    <Property Name="Description" Type="varchar" MaxLength="100" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+    <Property Name="HandlerId" Type="int" />
+    <Property Name="CheckerId" Type="int" />
+    <Property Name="BalanceRemark" Type="varchar" MaxLength="200" />
+    <Property Name="CollectMoneyRemark" Type="varchar" MaxLength="200" />
+    <Property Name="BalanceStatus" Type="int" />
+    <Property Name="Settlement" Type="varchar" MaxLength="20" />
+    <Property Name="modifier" Type="int" />
+    <Property Name="ModifierId" Type="int" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="IDCard" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="100" />
+    <Property Name="AccountId" Type="varchar" MaxLength="100" />
+    <Property Name="Phone" Type="varchar" MaxLength="100" />
+    <Property Name="Position" Type="varchar" MaxLength="100" />
+    <Property Name="PasswordSalt" Type="varchar" MaxLength="200" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="RoleId" Type="int" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Created" Type="datetime" />
+    <Property Name="Modified" Type="datetime" />
+  </EntityType>
+  <EntityContainer Name="TourismModelStoreContainer">
+    <EntitySet Name="Channel" EntityType="Self.Channel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Hotel" EntityType="Self.Hotel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HotelOrder" EntityType="Self.HotelOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RouteOrder" EntityType="Self.RouteOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierProduct" EntityType="Self.SupplierProduct" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TicketOrder" EntityType="Self.TicketOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

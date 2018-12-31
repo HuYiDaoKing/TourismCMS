@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <style type="text/css">
+        body {
+            TEXT-ALIGN: center;
+        }
+
+        #container {
+            position: absolute;
+            top: 50%;
+            height: 240px;
+            margin-top: -120px; /* negative half of the height */
+        }
+    </style>
+    <script type="text/javascript" charset="utf-8" src="~/Scripts/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="~/Scripts/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="~/Scripts/ueditor/lang/zh-cn/zh-cn.js"></script>
+    @Scripts.Render("~/bundles/jqueryval",
+            "~/Scripts/ueditor/ueditor.config.js",
+            "~/Scripts/ueditor/ueditor.all.min.js",
+            "~/Scripts/ueditor/lang/zh-cn/zh-cn.js")
+    <script type="text/javascript">
+        var editorOption = {
+            initialFrameWidth: 800,
+            initialFrameHeight: 400
+        };
+        var editor = new baidu.editor.ui.Editor(editorOption);
+        editor.render('Content');
+        $('form').submit(function () {
+            $('#Content').val(editor.getContent());
+        });
+
+        $(function () {
+
+            $('#btnSave').click(function () {
+                //$('#Content').val(editor.getContent());
+                alert(getContent());
+            })
+        })
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <textarea id="Content"></textarea>
+        <button id="btnSave" type="button"  value="保存"></button>
+    </div>
+</body>
+</html>
